@@ -58,7 +58,7 @@ final class Pawn: Piece {
         }
         
         switch color {
-        case .black where from.y + 1 < board.rows - 1:
+        case .black where from.y + 1 < board.rows:
             // Black moves down
             return moves(direction: 1)
         case .white where from.y > 0:

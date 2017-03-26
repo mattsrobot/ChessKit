@@ -46,7 +46,7 @@ final class BoardView: UIView {
         layer.backgroundColor = theme.boarderColor.cgColor
         layer.borderWidth = 1.0
         
-        board.validMoves.signal.observeValues { validMoves in
+        board.highlightedSquares.signal.observeValues { validMoves in
             self.grid.forEach { $0.highlighted = false }
             if let validMoves = validMoves, validMoves.count > 0 {
                 validMoves.forEach { move in
@@ -54,6 +54,12 @@ final class BoardView: UIView {
                 }
             }
         }
+        
+        board.selectedPiece.signal.observeValues { selectedPiece in
+            
+        }
+        
+        
         
         board.boardChanges.signal.observeValues { changeSet in
             if let changeSet = changeSet {
@@ -153,9 +159,10 @@ final class SquareView: UIView {
     var pieceView: PieceView?
     var board: Board
     weak var boardView: BoardView?
+    let highlightedView: UIView
     var highlighted: Bool = false {
         didSet {
-            backgroundColor = highlighted ? theme.highlightedSquareColor : theme.backgroundColor(square: square)
+            highlightedView.backgroundColor = highlighted ? theme.highlightedSquareColor : .clear
         }
     }
     private var button: UIButton
@@ -166,8 +173,13 @@ final class SquareView: UIView {
         self.button = UIButton(type: .custom)
         self.board = board
         self.boardView = boardView
+        self.highlightedView = UIView(frame: .zero)
         super.init(frame: .zero)
         backgroundColor = theme.backgroundColor(square: square)
+        addSubview(highlightedView)
+        highlightedView.snp.makeConstraints { make in
+            make.top.left.width.height.equalTo(self)
+        }
         addSubview(button)
         button.snp.makeConstraints { make in
             make.top.left.width.height.equalTo(self)

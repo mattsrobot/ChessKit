@@ -12,7 +12,7 @@ final class Theme {
 
     let blackSquareColor: UIColor = .lightGray
     let whiteSquareColor: UIColor = .white
-    let highlightedSquareColor: UIColor = .yellow
+    let highlightedSquareColor: UIColor = UIColor.yellow.withAlphaComponent(0.5)
     let boarderColor: UIColor = .black
     
     let blackKing = UIImage(named: "BlackKing")!

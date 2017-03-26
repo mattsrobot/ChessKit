@@ -33,7 +33,8 @@ final class Board {
     let selectedPiece = MutableProperty<Piece?>(nil)
     let validMoves = MutableProperty<[Position]?>(nil)
     let boardChanges = MutableProperty<ChangeSet?>(nil)
-    
+    var highlightedSquares:Property<[Position]?>!
+
     init() {
         self.grid = [Square](repeating: Square(color: .white, piece: nil), count: rows * columns)
         for column in 0...columns-1 {
@@ -54,6 +55,14 @@ final class Board {
                 self.validMoves.value = nil
             }
         }
+        let validator = Signal.combineLatest(selectedPiece.signal, validMoves.signal).map { selected, validMoves -> [Position]? in
+            var squaresToHighlight = validMoves
+            if let selected = selected, let position = self.position(of: selected) {
+                squaresToHighlight?.append(position)
+            }
+            return squaresToHighlight
+        }
+        self.highlightedSquares = Property(initial: nil, then: validator)
     }
     
     func tap(position tappedPosition: Position) {

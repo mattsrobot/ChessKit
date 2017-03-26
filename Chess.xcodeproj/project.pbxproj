@@ -17,6 +17,7 @@
 		DE5A1D5D1E86EF1F00AAC115 /* Castle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A1D5C1E86EF1F00AAC115 /* Castle.swift */; };
 		DE5A1D5F1E87203400AAC115 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A1D5E1E87203400AAC115 /* Position.swift */; };
 		DE5A1D611E87E96900AAC115 /* ChangeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A1D601E87E96900AAC115 /* ChangeSet.swift */; };
+		DE5A1D631E87FB7B00AAC115 /* PawnSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A1D621E87FB7B00AAC115 /* PawnSpec.swift */; };
 		DE61E6401E86B403008C86EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE61E63F1E86B403008C86EF /* AppDelegate.swift */; };
 		DE61E6421E86B403008C86EF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE61E6411E86B403008C86EF /* ViewController.swift */; };
 		DE61E6451E86B403008C86EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE61E6431E86B403008C86EF /* Main.storyboard */; };
@@ -62,6 +63,7 @@
 		DE5A1D5C1E86EF1F00AAC115 /* Castle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Castle.swift; sourceTree = "<group>"; };
 		DE5A1D5E1E87203400AAC115 /* Position.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		DE5A1D601E87E96900AAC115 /* ChangeSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSet.swift; sourceTree = "<group>"; };
+		DE5A1D621E87FB7B00AAC115 /* PawnSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PawnSpec.swift; sourceTree = "<group>"; };
 		DE61E63C1E86B403008C86EF /* Chess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE61E63F1E86B403008C86EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DE61E6411E86B403008C86EF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				DE61E6541E86B403008C86EF /* ChessTests.swift */,
+				DE5A1D621E87FB7B00AAC115 /* PawnSpec.swift */,
 				DE61E6561E86B403008C86EF /* Info.plist */,
 			);
 			path = ChessTests;
@@ -482,6 +485,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE5A1D631E87FB7B00AAC115 /* PawnSpec.swift in Sources */,
 				DE61E6551E86B403008C86EF /* ChessTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
