@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ChessBoardViewController.swift
 //  Chess
 //
 //  Created by Matthew Wilkinson on 25/03/2017.
@@ -7,19 +7,28 @@
 //
 
 import UIKit
+import SnapKit
 
-class ViewController: UIViewController {
+final class ChessBoardViewController: UIViewController {
 
+    var boardView: BoardView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let theme = Theme()
+        let board = Board()
+        board.initializePieces()
+        let gridSize = min(400, min(view.frame.width, view.frame.height) - 40) / CGFloat(board.columns)
+        let boardView = BoardView(theme: theme, board: board, size: gridSize)
+        self.boardView = boardView
+        view.addSubview(boardView)
+        boardView.snp.makeConstraints { make in
+            make.width.equalTo(boardView.frame.width)
+            make.height.equalTo(boardView.frame.height)
+            make.center.equalTo(view)
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+    
+    
 }
 
