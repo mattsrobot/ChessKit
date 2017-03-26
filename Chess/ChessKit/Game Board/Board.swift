@@ -68,6 +68,9 @@ final class Board {
                 if selectedPiece === tappedPiece {
                     // d. unselecting
                     self.selectedPiece.value = nil
+                } else if selectedPiece.color == tappedPiece.color {
+                    // a. selecting a piece
+                    self.selectedPiece.value = tappedPiece
                 } else {
                     if let from = position(of: selectedPiece),
                         let to = position(of: tappedPiece) {
