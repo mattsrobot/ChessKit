@@ -18,10 +18,6 @@ final class King: Piece {
         self.moved = moved
     }
     
-    func move(from: Position, to: Position, board: Board) {
-        
-    }
-    
     func validMoves(from: Position, board: Board) -> [Position] {
         return [Position]()
     }

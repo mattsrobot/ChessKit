@@ -69,10 +69,6 @@ final class Pawn: Piece {
         }
     }
     
-    func move(from: Position, to: Position, board: Board) {
-        board.movePiece(from: from, to: to)
-    }
-    
     func validMoves(from: Position, board: Board) -> [Position] {
         let valid = possibleMoves(from: from, board: board)
             .filter { move -> Bool in

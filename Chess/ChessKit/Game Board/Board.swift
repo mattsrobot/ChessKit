@@ -29,8 +29,10 @@ final class Board {
 
     let rows: Int = 8, columns: Int = 8
     var grid: [Square]
+    
     let selectedPiece = MutableProperty<Piece?>(nil)
     let validMoves = MutableProperty<[Position]?>(nil)
+    let boardChanges = MutableProperty<ChangeSet?>(nil)
     
     init() {
         self.grid = [Square](repeating: Square(color: .white, piece: nil), count: rows * columns)
@@ -45,7 +47,6 @@ final class Board {
                 self[column, row] = square
             }
         }
-        
         selectedPiece.signal.observeValues { selectedPiece in
             if let selectedPiece = selectedPiece , let selectedPosition = self.position(of: selectedPiece)  {
                 self.validMoves.value = selectedPiece.validMoves(from: selectedPosition, board: self)
@@ -56,26 +57,23 @@ final class Board {
     }
     
     func tap(position tappedPosition: Position) {
-        
         // a. selecting a piece
         // b. taking a piece
         // c. castling
         // d. unselecting
         // e. invalid move
         // f. moving a piece
-        
         if let tappedPiece = piece(at: tappedPosition) {
-
             if let selectedPiece = selectedPiece.value {
                 if selectedPiece === tappedPiece {
                     // d. unselecting
                     self.selectedPiece.value = nil
                 } else {
-                    if let from = position(of: tappedPiece),
-                        let to = position(of: selectedPiece) {
-                        
+                    if let from = position(of: selectedPiece),
+                        let to = position(of: tappedPiece) {
                         if selectedPiece.canMove(from: from, to: to, board: self) {
-                            movePiece(from: from, to: to)
+                            let changeSet = ChangeSet(movements: [(from: from, to: to)])
+                            movePieces(changeSet: changeSet)
                         } else {
                             // e. invalid move
                             //showInvalidMove()
@@ -91,7 +89,8 @@ final class Board {
                 let from = position(of: selectedPiece) {
                 if selectedPiece.canMove(from: from, to: tappedPosition, board: self) {
                     // a. moving a piece
-                    movePiece(from: from, to: tappedPosition)
+                    let changeSet = ChangeSet(movements: [(from: from, to: tappedPosition)])
+                    movePieces(changeSet: changeSet)
                 } else {
                     // b. invalid move
                     //showInvalidMove()
@@ -180,8 +179,16 @@ final class Board {
         
     }
     
-    func movePiece(from: Position, to: Position) {
-
+    func movePieces(changeSet: ChangeSet) {
+        for movement in changeSet.movements {
+            if let fromPiece = piece(at: movement.from) {
+                fromPiece.moved = true
+                self[movement.from.x, movement.from.y].piece = nil
+                self[movement.to.x, movement.to.y].piece = fromPiece
+            }
+        }
+        boardChanges.value = changeSet
+        selectedPiece.value = nil
     }
     
 }

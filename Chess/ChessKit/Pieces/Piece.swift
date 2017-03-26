@@ -12,9 +12,7 @@ protocol Piece: class {
     
     var color: Color { get }
     var moved: Bool { get set }
-    
-    func move(from: Position, to: Position, board: Board)
-    
+        
     func canMove(from: Position, to: Position, board: Board) -> Bool
     
     func validMoves(from: Position, board: Board) -> [Position]

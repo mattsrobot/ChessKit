@@ -18,7 +18,7 @@ final class ChessBoardViewController: UIViewController {
         let theme = Theme()
         let board = Board()
         board.initializePieces()
-        let gridSize = min(400, min(view.frame.width, view.frame.height) - 40) / CGFloat(board.columns)
+        let gridSize = min(400, min(view.frame.width, view.frame.height) - 20) / CGFloat(board.columns)
         let boardView = BoardView(theme: theme, board: board, size: gridSize)
         self.boardView = boardView
         view.addSubview(boardView)

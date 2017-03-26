@@ -33,6 +33,7 @@ final class BoardView: UIView {
                 if let piece = square.piece {
                     let pieceView = PieceView(theme: theme, piece: piece, board: board)
                     pieces.append(pieceView)
+                    squareView.pieceView = pieceView
                     pieceView.frame = frame
                 }
                 squareView.frame = frame
@@ -50,6 +51,25 @@ final class BoardView: UIView {
             if let validMoves = validMoves, validMoves.count > 0 {
                 validMoves.forEach { move in
                     self.square(at: move).highlighted = true
+                }
+            }
+        }
+        
+        board.boardChanges.signal.observeValues { changeSet in
+            if let changeSet = changeSet {
+                for movement in changeSet.movements {
+                    let fromSquare = self.square(at: movement.from)
+                    if let fromPieceView = fromSquare.pieceView {
+                        fromSquare.pieceView = nil
+                        let toSquare = self.square(at: movement.to)
+                        if let toPieceView = toSquare.pieceView {
+                            toPieceView.removeFromSuperview()
+                        }
+                        toSquare.pieceView = fromPieceView
+                        UIView.animate(withDuration: 0.5) {
+                            fromPieceView.frame = toSquare.frame
+                        }
+                    }
                 }
             }
         }
