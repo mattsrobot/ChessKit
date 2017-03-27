@@ -18,8 +18,11 @@ final class Queen: Piece {
         self.moved = moved
     }
     
-    func validMoves(from: Position, board: Board) -> [Position] {
-        return [Position]()
+    func possibleMoves(from: Position, board: Board) -> [Position] {
+        var possibleMoves = [Position]()
+        possibleMoves.append(contentsOf: Bishop.horizontalAndVerticalMoves(from: from, board: board, color: color))
+        possibleMoves.append(contentsOf: Castle.horizontalAndVerticalMoves(from: from, board: board, color: color))
+        return possibleMoves
     }
     
 }

@@ -23,7 +23,7 @@ class PawnSpec: QuickSpec {
             var board: Board!
             
             beforeEach {
-                board = Board()
+                board = Board(playerColor: .white)
                 board.initializePieces()
             }
             
@@ -33,7 +33,7 @@ class PawnSpec: QuickSpec {
                 let end = Position(x: 0, y: 3)
                 let blackPawn = board.piece(at: start)!
                 // WHEN pawn double moves
-                let validMoves = blackPawn.validMoves(from: start, board: board)
+                let validMoves = blackPawn.validMoves(from: start, board: board, check: true)
                 expect(blackPawn.moved).to(equal(false))
                 expect(validMoves).to(contain(Position(x: 0, y: 2)))
                 expect(validMoves).to(contain(end))
@@ -44,8 +44,8 @@ class PawnSpec: QuickSpec {
                 expect(blackPawn.moved).to(equal(true))
                 expect(board.hasPiece(at: end)).to(equal(true))
                 expect(board.hasPiece(at: start)).to(equal(false))
-                expect(blackPawn.validMoves(from: end, board: board)).to(contain(validMove))
-                expect(blackPawn.validMoves(from: end, board: board)).toNot(contain(invalidMove))
+                expect(blackPawn.validMoves(from: end, board: board, check: true)).to(contain(validMove))
+                expect(blackPawn.validMoves(from: end, board: board, check: true)).toNot(contain(invalidMove))
             }
             
             it("can move forward") {
@@ -54,7 +54,7 @@ class PawnSpec: QuickSpec {
                 let end = Position(x: 0, y: 2)
                 let blackPawn = board.piece(at: start)!
                 // WHEN pawn moves
-                let validMoves = blackPawn.validMoves(from: start, board: board)
+                let validMoves = blackPawn.validMoves(from: start, board: board, check: true)
                 expect(blackPawn.moved).to(equal(false))
                 expect(validMoves).to(contain(end))
                 board.movePieces(changeSet: ChangeSet(movements: [(from: start, to: end)]))
@@ -64,8 +64,8 @@ class PawnSpec: QuickSpec {
                 expect(blackPawn.moved).to(equal(true))
                 expect(board.hasPiece(at: end)).to(equal(true))
                 expect(board.hasPiece(at: start)).to(equal(false))
-                expect(blackPawn.validMoves(from: end, board: board)).to(contain(validMove))
-                expect(blackPawn.validMoves(from: end, board: board)).toNot(contain(invalidMove))
+                expect(blackPawn.validMoves(from: end, board: board, check: true)).to(contain(validMove))
+                expect(blackPawn.validMoves(from: end, board: board, check: true)).toNot(contain(invalidMove))
             }
             
         }

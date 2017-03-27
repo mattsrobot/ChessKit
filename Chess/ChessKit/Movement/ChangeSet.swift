@@ -6,7 +6,7 @@
 //  Copyright © 2017 Some Robots. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 struct ChangeSet {
     let movements: [(from: Position, to: Position)]

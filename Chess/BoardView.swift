@@ -58,9 +58,7 @@ final class BoardView: UIView {
         board.selectedPiece.signal.observeValues { selectedPiece in
             
         }
-        
-        
-        
+            
         board.boardChanges.signal.observeValues { changeSet in
             if let changeSet = changeSet {
                 for movement in changeSet.movements {

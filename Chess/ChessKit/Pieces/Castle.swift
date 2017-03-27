@@ -18,8 +18,70 @@ final class Castle: Piece {
         self.moved = moved
     }
     
-    func validMoves(from: Position, board: Board) -> [Position] {
-        return [Position]()
+    class func horizontalAndVerticalMoves(from: Position, board: Board, color: Color) -> [Position] {
+        var possibleMoves = [Position]()
+        
+        let topVertical = from.by(incrementingVerticalTop: 7)
+        for position in topVertical {
+            if position.containedIn(board: board) {
+                if board.has(color: color, at: position) {
+                    break
+                }
+                if board.has(color: color.opposite(), at: position) {
+                    possibleMoves.append(position)
+                    break
+                }
+                possibleMoves.append(position)
+            }
+        }
+        
+        let bottomVertical = from.by(incrementingVerticalBottom: 7)
+        for position in bottomVertical {
+            if position.containedIn(board: board) {
+                if board.has(color: color, at: position) {
+                    break
+                }
+                if board.has(color: color.opposite(), at: position) {
+                    possibleMoves.append(position)
+                    break
+                }
+                possibleMoves.append(position)
+            }
+        }
+        
+        let rightHorizontal = from.by(incrementingHorizontalRight: 7)
+        for position in rightHorizontal {
+            if position.containedIn(board: board) {
+                if board.has(color: color, at: position) {
+                    break
+                }
+                if board.has(color: color.opposite(), at: position) {
+                    possibleMoves.append(position)
+                    break
+                }
+                possibleMoves.append(position)
+            }
+        }
+        
+        let leftHorizontal = from.by(incrementingHorizontalLeft: 7)
+        for position in leftHorizontal {
+            if position.containedIn(board: board) {
+                if board.has(color: color, at: position) {
+                    break
+                }
+                if board.has(color: color.opposite(), at: position) {
+                    possibleMoves.append(position)
+                    break
+                }
+                possibleMoves.append(position)
+            }
+        }
+        
+        return possibleMoves
+    }
+    
+    func possibleMoves(from: Position, board: Board) -> [Position] {
+        return Castle.horizontalAndVerticalMoves(from: from, board: board, color: color)
     }
 
 }

@@ -14,6 +14,12 @@ import enum Result.NoError
 enum Color {
     case white
     case black
+    func opposite() -> Color {
+        switch self {
+        case .white: return .black
+        case .black: return .white
+        }
+    }
 }
 
 final class Square {
@@ -23,19 +29,46 @@ final class Square {
         self.color = color
         self.piece = piece
     }
+    func copy() -> Square {
+        let copy = Square(color: color, piece: piece)
+        return copy
+    }
 }
 
 final class Board {
 
-    let rows: Int = 8, columns: Int = 8
+    var whiteKing:King!
+    var blackKing:King!
     var grid: [Square]
-    
+    var highlightedSquares:Property<[Position]?>!
+    let playerColor:Color
+    let rows: Int = 8, columns: Int = 8
     let selectedPiece = MutableProperty<Piece?>(nil)
     let validMoves = MutableProperty<[Position]?>(nil)
     let boardChanges = MutableProperty<ChangeSet?>(nil)
-    var highlightedSquares:Property<[Position]?>!
-
-    init() {
+    let checkWhite = MutableProperty(false)
+    let checkBlack = MutableProperty(false)
+    let drawWhite = MutableProperty(false)
+    let drawBlack = MutableProperty(false)
+    let whiteWins = MutableProperty(false)
+    let blackWins = MutableProperty(false)
+    let color = MutableProperty(Color.white)
+    
+    func copy() -> Board {
+        // Poor copy implementation
+        let board = Board(playerColor: playerColor)
+        board.grid = self.grid.map { $0.copy() }
+        let pieces = board.grid.flatMap { $0.piece }
+        let kings = pieces.flatMap { $0 as? King}
+        let whiteKing = kings.filter { $0.color == .white }.first!
+        board.whiteKing = whiteKing
+        let blackKing = kings.filter { $0.color == .black }.first!
+        board.blackKing = blackKing
+        return board
+    }
+    
+    init(playerColor: Color) {
+        self.playerColor = playerColor
         self.grid = [Square](repeating: Square(color: .white, piece: nil), count: rows * columns)
         for column in 0...columns-1 {
             for row in 0...rows-1 {
@@ -50,7 +83,7 @@ final class Board {
         }
         selectedPiece.signal.observeValues { selectedPiece in
             if let selectedPiece = selectedPiece , let selectedPosition = self.position(of: selectedPiece)  {
-                self.validMoves.value = selectedPiece.validMoves(from: selectedPosition, board: self)
+                self.validMoves.value = selectedPiece.validMoves(from: selectedPosition, board: self, check: true)
             } else {
                 self.validMoves.value = nil
             }
@@ -114,16 +147,80 @@ final class Board {
         }
     }
     
-    func isCheckMate(from: Position, to: Position) -> Bool {
-        return false
+    func isCheckMate() -> (white: Bool, black: Bool) {
+        
+        let isCheckWhite = whiteKing.isChecked(board: self)
+        var isCheckMateWhite = false
+
+        if isCheckWhite {
+            isCheckMateWhite = whiteKing.validMoves(board: self, check: true).count == 0
+            if isCheckMateWhite {
+                for pieces in currentPieces(color: .white) {
+                    if pieces.validMoves(board: self, check: true).count >= 1 {
+                        isCheckMateWhite = false
+                        break
+                    }
+                }
+            }
+        }
+        
+        let isCheckBlack = blackKing.isChecked(board: self)
+        var isCheckMateBlack = false
+        
+        if isCheckBlack {
+            isCheckMateBlack = blackKing.validMoves(board: self, check: true).count == 0
+            if isCheckMateBlack {
+                for pieces in currentPieces(color: .black) {
+                    if pieces.validMoves(board: self, check: true).count >= 1 {
+                        isCheckMateBlack = false
+                        break
+                    }
+                }
+            }
+        }
+        
+        return (white: isCheckMateWhite, black: isCheckMateBlack)
     }
     
-    func isDraw(from: Position, to: Position) -> Bool {
-        return false
+    func isDraw(from: Position, to: Position) -> (white: Bool, black: Bool) {
+        
+        let isCheckWhite = whiteKing.isChecked(board: self)
+        var isDrawWhite = false
+        
+        if !isCheckWhite {
+            isDrawWhite = whiteKing.validMoves(board: self, check: false).count == 0
+        }
+        
+        let isCheckBlack = blackKing.isChecked(board: self)
+        var isDrawBlack = false
+
+        if !isCheckBlack {
+            isDrawBlack = whiteKing.validMoves(board: self, check: false).count == 0
+        }
+
+        return (white: isDrawWhite, black: isDrawBlack)
     }
     
     func isCheck(from: Position, to: Position) -> (white: Bool, black: Bool) {
-        return (white: false, black: false)
+        let boardCopy = self.copy()
+        let piece = boardCopy.piece(at: from)
+        boardCopy[from.x, from.y].piece = nil
+        boardCopy[to.x, to.y].piece = piece
+        var isCheckWhite = false
+        for enemeyPiece in boardCopy.currentPieces(color: .black) {
+            if boardCopy.whiteKing.isThreatendBy(piece: enemeyPiece, board: boardCopy) {
+                isCheckWhite = true
+                break
+            }
+        }
+        var isCheckBlack = false
+        for enemeyPiece in boardCopy.currentPieces(color: .white) {
+            if boardCopy.blackKing.isThreatendBy(piece: enemeyPiece, board: boardCopy) {
+                isCheckBlack = true
+                break
+            }
+        }
+        return (white: isCheckWhite, black: isCheckBlack)
     }
     
     func indexIsValid(column: Int, row: Int) -> Bool {
@@ -136,6 +233,13 @@ final class Board {
     
     func hasPiece(at: Position) -> Bool {
         return self[at.x, at.y].piece != nil
+    }
+    
+    func has(color: Color, at: Position) -> Bool {
+        if let pieace = self[at.x, at.y].piece {
+            return pieace.color == color
+        }
+        return false
     }
     
     func position(of: Piece) -> Position? {
@@ -156,38 +260,55 @@ final class Board {
         set { grid[(row * columns) + column] = newValue }
     }
     
+    func currentPieces(color: Color) -> [Piece] {
+        return grid.flatMap { $0.piece }.filter { $0.color == color }
+    }
+    
     func initializePieces() {
         // Pawns
         for column in 0...columns-1 {
-            self[column, 1].piece = Pawn(color: .black, moved: false)
-            self[column, 6].piece = Pawn(color: .white, moved: false)
+            self[column, 1].piece = Pawn(color: playerColor.opposite(), moved: false)
+            self[column, 6].piece = Pawn(color: playerColor, moved: false)
         }
         
         // Kings
-        self[4,0].piece = King(color: .black, moved: false)
-        self[4,7].piece = King(color: .white, moved: false)
+        self[4,0].piece = King(color: playerColor.opposite(), moved: false)
+        
+        if playerColor == .white {
+            blackKing = self[4,0].piece as! King
+        } else {
+            whiteKing = self[4,0].piece as! King
+        }
+        
+        self[4,7].piece = King(color: playerColor, moved: false)
+        
+        if playerColor == .white {
+            whiteKing = self[4,7].piece as! King
+        } else {
+            blackKing = self[4,7].piece as! King
+        }
         
         // Queens
-        self[3,0].piece = Queen(color: .black, moved: false)
-        self[3,7].piece = Queen(color: .white, moved: false)
+        self[3,0].piece = Queen(color: playerColor.opposite(), moved: false)
+        self[3,7].piece = Queen(color: playerColor, moved: false)
         
         // Castles
-        self[0,0].piece = Castle(color: .black, moved: false)
-        self[7,0].piece = Castle(color: .black, moved: false)
-        self[0,7].piece = Castle(color: .white, moved: false)
-        self[7,7].piece = Castle(color: .white, moved: false)
+        self[0,0].piece = Castle(color: playerColor.opposite(), moved: false)
+        self[7,0].piece = Castle(color: playerColor.opposite(), moved: false)
+        self[0,7].piece = Castle(color: playerColor, moved: false)
+        self[7,7].piece = Castle(color: playerColor, moved: false)
         
         // Knights
-        self[1,0].piece = Knight(color: .black, moved: false)
-        self[6,0].piece = Knight(color: .black, moved: false)
-        self[1,7].piece = Knight(color: .white, moved: false)
-        self[6,7].piece = Knight(color: .white, moved: false)
+        self[1,0].piece = Knight(color: playerColor.opposite(), moved: false)
+        self[6,0].piece = Knight(color: playerColor.opposite(), moved: false)
+        self[1,7].piece = Knight(color: playerColor, moved: false)
+        self[6,7].piece = Knight(color: playerColor, moved: false)
         
         // Bishops
-        self[2,0].piece = Bishop(color: .black, moved: false)
-        self[5,0].piece = Bishop(color: .black, moved: false)
-        self[2,7].piece = Bishop(color: .white, moved: false)
-        self[5,7].piece = Bishop(color: .white, moved: false)
+        self[2,0].piece = Bishop(color: playerColor.opposite(), moved: false)
+        self[5,0].piece = Bishop(color: playerColor.opposite(), moved: false)
+        self[2,7].piece = Bishop(color: playerColor, moved: false)
+        self[5,7].piece = Bishop(color: playerColor, moved: false)
         
     }
     
@@ -201,6 +322,13 @@ final class Board {
         }
         boardChanges.value = changeSet
         selectedPiece.value = nil
+        let mate = isCheckMate()
+        if mate.white {
+            blackWins.value = true
+        }
+        if mate.black {
+            whiteWins.value = true
+        }
     }
     
 }

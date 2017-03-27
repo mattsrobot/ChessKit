@@ -57,33 +57,32 @@ final class Pawn: Piece {
             return possibleMoves
         }
         
-        switch color {
-        case .black where from.y + 1 < board.rows:
-            // Black moves down
-            return moves(direction: 1)
-        case .white where from.y > 0:
-            // White moves up
-            return moves(direction: -1)
-        default:
-            return [Position]()
-        }
-    }
-    
-    func validMoves(from: Position, board: Board) -> [Position] {
-        let valid = possibleMoves(from: from, board: board)
-            .filter { move -> Bool in
-                // Don't move forward if moving into Check
-                let isCheck = board.isCheck(from: from, to: move)
-                switch color {
-                case .white where isCheck.white:
-                    return false
-                case .black where isCheck.black:
-                    return false
-                default:
-                    return true
-                }
+        switch board.playerColor {
+        case .white:
+            switch color {
+            case .black where from.y + 1 < board.rows:
+                // Black moves down
+                return moves(direction: 1)
+            case .white where from.y > 0:
+                // White moves up
+                return moves(direction: -1)
+            default:
+                return [Position]()
             }
-        return valid
+        case .black:
+            switch color {
+            case .black where from.y > 0:
+                // Black moves up
+                return moves(direction: -1)
+            case .white  where from.y + 1 < board.rows:
+                // White moves down
+                return moves(direction: 1)
+            default:
+                return [Position]()
+            }
+        }
+        
+
     }
     
 }

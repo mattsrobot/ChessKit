@@ -1,15 +1,14 @@
 //
-//  ChessTests.swift
-//  ChessTests
+//  BoardSpec.swift
+//  Chess
 //
-//  Created by Matthew Wilkinson on 25/03/2017.
+//  Created by Matthew Wilkinson on 27/03/2017.
 //  Copyright © 2017 Some Robots. All rights reserved.
 //
 
 import XCTest
-@testable import Chess
 
-class ChessTests: XCTestCase {
+class BoardSpec: XCTestCase {
     
     override func setUp() {
         super.setUp()
