@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChessKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

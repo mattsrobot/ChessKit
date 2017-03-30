@@ -48,6 +48,16 @@
                ReferencedContainer = "container:Chess.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DE0F9F721E89294200F09BD1"
+               BuildableName = "ChessKitTests.xctest"
+               BlueprintName = "ChessKitTests"
+               ReferencedContainer = "container:Chess.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

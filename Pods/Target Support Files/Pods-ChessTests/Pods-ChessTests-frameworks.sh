@@ -89,22 +89,22 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/ReactiveCocoa/ReactiveCocoa.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/ReactiveSwift/ReactiveSwift.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Result/Result.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Mockingjay/Mockingjay.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Nimble/Nimble.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Quick/Quick.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/URITemplate/URITemplate.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ReactiveCocoa-iOS/ReactiveCocoa.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ReactiveSwift-iOS/ReactiveSwift.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Result-iOS/Result.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Mockingjay-iOS/Mockingjay.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Nimble-iOS/Nimble.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Quick-iOS/Quick.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/URITemplate-iOS/URITemplate.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/ReactiveCocoa/ReactiveCocoa.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/ReactiveSwift/ReactiveSwift.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Result/Result.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Mockingjay/Mockingjay.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Nimble/Nimble.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Quick/Quick.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/URITemplate/URITemplate.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ReactiveCocoa-iOS/ReactiveCocoa.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ReactiveSwift-iOS/ReactiveSwift.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Result-iOS/Result.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Mockingjay-iOS/Mockingjay.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Nimble-iOS/Nimble.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Quick-iOS/Quick.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/URITemplate-iOS/URITemplate.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

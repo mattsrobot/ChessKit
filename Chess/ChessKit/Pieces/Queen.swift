@@ -8,17 +8,17 @@
 
 import Foundation
 
-final class Queen: Piece {
+public final class Queen: Piece {
 
-    var color: Color
-    var moved: Bool
+    public var color: Color
+    public var moved: Bool
     
-    required init(color: Color, moved: Bool) {
+    required public init(color: Color, moved: Bool) {
         self.color = color
         self.moved = moved
     }
     
-    func possibleMoves(from: Position, board: Board) -> [Position] {
+    public func possibleMoves(from: Position, board: Board) -> [Position] {
         var possibleMoves = [Position]()
         possibleMoves.append(contentsOf: Bishop.horizontalAndVerticalMoves(from: from, board: board, color: color))
         possibleMoves.append(contentsOf: Castle.horizontalAndVerticalMoves(from: from, board: board, color: color))

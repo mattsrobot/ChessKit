@@ -8,12 +8,12 @@
 
 import Foundation
 
-final class Castle: Piece {
+public final class Castle: Piece {
     
-    var color: Color
-    var moved: Bool
+    public var color: Color
+    public var moved: Bool
     
-    required init(color: Color, moved: Bool) {
+    required public init(color: Color, moved: Bool) {
         self.color = color
         self.moved = moved
     }
@@ -80,7 +80,7 @@ final class Castle: Piece {
         return possibleMoves
     }
     
-    func possibleMoves(from: Position, board: Board) -> [Position] {
+    public func possibleMoves(from: Position, board: Board) -> [Position] {
         return Castle.horizontalAndVerticalMoves(from: from, board: board, color: color)
     }
 

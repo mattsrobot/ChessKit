@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChessKit
 import SnapKit
 import ReactiveSwift
 import ReactiveCocoa
@@ -65,7 +66,7 @@ final class ChessBoardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadBoard(board: Board(playerColor: .black))
+        loadBoard(board: Board(playerColor: .white))
     }
     
 }

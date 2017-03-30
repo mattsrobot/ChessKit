@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChessKit
 
 final class Theme {
 
@@ -36,10 +37,6 @@ final class Theme {
         case .black:
             return blackSquareColor
         }
-    }
-    
-    func highlightedColor() -> UIColor {
-        return highlightedSquareColor
     }
     
     func image(piece: Piece) -> UIImage? {

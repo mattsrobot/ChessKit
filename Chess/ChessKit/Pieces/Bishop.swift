@@ -8,12 +8,12 @@
 
 import Foundation
 
-final class Bishop: Piece {
+public final class Bishop: Piece {
 
-    var color: Color
-    var moved: Bool
+    public var color: Color
+    public var moved: Bool
     
-    required init(color: Color, moved: Bool) {
+    required public init(color: Color, moved: Bool) {
         self.color = color
         self.moved = moved
     }
@@ -81,7 +81,7 @@ final class Bishop: Piece {
         return possibleMoves
     }
     
-    func possibleMoves(from: Position, board: Board) -> [Position] {
+    public func possibleMoves(from: Position, board: Board) -> [Position] {
        return Bishop.horizontalAndVerticalMoves(from: from, board: board, color: color)
     }
     

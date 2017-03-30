@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Piece: class {
+public protocol Piece: class {
     
     var color: Color { get }
     var moved: Bool { get set }
@@ -22,7 +22,7 @@ protocol Piece: class {
 
 extension Piece {
     
-    func canMove(from: Position, to: Position, board: Board) -> Bool {
+    public func canMove(from: Position, to: Position, board: Board) -> Bool {
         return validMoves(from: from, board: board, check: true).filter { $0 == to }.count >= 1
     }
     
@@ -37,7 +37,7 @@ extension Piece {
         return validMoves(from: board.position(of: self)!, board: board, check: check)
     }
     
-    func validMoves(from: Position, board: Board, check: Bool) -> [Position] {
+    public func validMoves(from: Position, board: Board, check: Bool) -> [Position] {
         let valid = possibleMoves(from: from, board: board)
             .filter { move -> Bool in
                 if !check {

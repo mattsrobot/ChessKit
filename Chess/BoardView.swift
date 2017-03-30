@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChessKit
 import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
@@ -192,7 +193,7 @@ final class SquareView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("use init(square:)")
+        fatalError("use init(theme: square: board: boardView:)")
     }
     
 }

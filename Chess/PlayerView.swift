@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChessKit
 import SnapKit
 import ReactiveSwift
 import ReactiveCocoa

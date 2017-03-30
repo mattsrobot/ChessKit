@@ -8,17 +8,17 @@
 
 import Foundation
 
-final class Pawn: Piece {
+public final class Pawn: Piece {
     
-    var color: Color
-    var moved: Bool
+    public var color: Color
+    public var moved: Bool
     
-    required init(color: Color, moved: Bool) {
+    required public init(color: Color, moved: Bool) {
         self.color = color
         self.moved = moved
     }
     
-    func possibleMoves(from: Position, board: Board) -> [Position] {
+    public func possibleMoves(from: Position, board: Board) -> [Position] {
         
         func moves(direction: Int) -> [Position] {
             

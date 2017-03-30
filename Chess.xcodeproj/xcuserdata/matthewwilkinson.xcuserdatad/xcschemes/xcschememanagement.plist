@@ -9,9 +9,59 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>ChessKit.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>26</integer>
+		</dict>
+		<key>ChessKitMac.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>27</integer>
+		</dict>
+		<key>ChessMac.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>DE0F9F6A1E89294200F09BD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE0F9F721E89294200F09BD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE0F9F8D1E8929F400F09BD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE0F9F951E8929F400F09BD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE3B82B21E8926930012A976</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE3B82C21E8926940012A976</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE3B82CD1E8926940012A976</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DE61E63B1E86B403008C86EF</key>
 		<dict>
 			<key>primary</key>

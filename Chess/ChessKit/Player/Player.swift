@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Player {
+final public class Player {
 
 
 }

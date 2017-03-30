@@ -8,6 +8,11 @@
 
 import Foundation
 
-struct ChangeSet {
-    let movements: [(from: Position, to: Position)]
+public struct ChangeSet {
+    public let movements: [(from: Position, to: Position)]
+    
+    public init(movements: [(from: Position, to: Position)]) {
+        self.movements = movements
+    }
+    
 }

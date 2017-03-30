@@ -8,17 +8,17 @@
 
 import Foundation
 
-final class Knight: Piece {
+public final class Knight: Piece {
 
-    var color: Color
-    var moved: Bool
+    public var color: Color
+    public var moved: Bool
     
-    required init(color: Color, moved: Bool) {
+    required public init(color: Color, moved: Bool) {
         self.color = color
         self.moved = moved
     }
     
-    func possibleMoves(from: Position, board: Board) -> [Position] {
+    public func possibleMoves(from: Position, board: Board) -> [Position] {
         var possibleMoves = [Position]()
 
         let topLeft = from.by(movingX: -1, movingY: 2)

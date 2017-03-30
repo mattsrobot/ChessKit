@@ -11,10 +11,10 @@ import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 
-enum Color {
+public enum Color {
     case white
     case black
-    func opposite() -> Color {
+    public func opposite() -> Color {
         switch self {
         case .white: return .black
         case .black: return .white
@@ -22,39 +22,39 @@ enum Color {
     }
 }
 
-final class Square {
-    let color:Color
-    var piece: Piece?
-    init(color: Color, piece: Piece?) {
+public final class Square {
+    public let color:Color
+    public var piece: Piece?
+    public init(color: Color, piece: Piece?) {
         self.color = color
         self.piece = piece
     }
-    func copy() -> Square {
+    public func copy() -> Square {
         let copy = Square(color: color, piece: piece)
         return copy
     }
 }
 
-final class Board {
+public final class Board {
 
-    var whiteKing:King!
-    var blackKing:King!
-    var grid: [Square]
-    var highlightedSquares:Property<[Position]?>!
-    let playerColor:Color
-    let rows: Int = 8, columns: Int = 8
-    let selectedPiece = MutableProperty<Piece?>(nil)
-    let validMoves = MutableProperty<[Position]?>(nil)
-    let boardChanges = MutableProperty<ChangeSet?>(nil)
-    let checkWhite = MutableProperty(false)
-    let checkBlack = MutableProperty(false)
-    let drawWhite = MutableProperty(false)
-    let drawBlack = MutableProperty(false)
-    let whiteWins = MutableProperty(false)
-    let blackWins = MutableProperty(false)
-    let color = MutableProperty(Color.white)
+    public var whiteKing:King!
+    public var blackKing:King!
+    public var grid: [Square]
+    public var highlightedSquares:Property<[Position]?>!
+    public let playerColor:Color
+    public let rows: Int = 8, columns: Int = 8
+    public let selectedPiece = MutableProperty<Piece?>(nil)
+    public let validMoves = MutableProperty<[Position]?>(nil)
+    public let boardChanges = MutableProperty<ChangeSet?>(nil)
+    public let checkWhite = MutableProperty(false)
+    public let checkBlack = MutableProperty(false)
+    public let drawWhite = MutableProperty(false)
+    public let drawBlack = MutableProperty(false)
+    public let whiteWins = MutableProperty(false)
+    public let blackWins = MutableProperty(false)
+    public let color = MutableProperty(Color.white)
     
-    func copy() -> Board {
+    public func copy() -> Board {
         // Poor copy implementation
         let board = Board(playerColor: playerColor)
         board.grid = self.grid.map { $0.copy() }
@@ -67,7 +67,7 @@ final class Board {
         return board
     }
     
-    init(playerColor: Color) {
+    public init(playerColor: Color) {
         self.playerColor = playerColor
         self.grid = [Square](repeating: Square(color: .white, piece: nil), count: rows * columns)
         for column in 0...columns-1 {
@@ -98,7 +98,7 @@ final class Board {
         self.highlightedSquares = Property(initial: nil, then: validator)
     }
     
-    func tap(position tappedPosition: Position) {
+    public func tap(position tappedPosition: Position) {
         // a. selecting a piece
         // b. taking a piece
         // c. castling
@@ -147,7 +147,7 @@ final class Board {
         }
     }
     
-    func isCheckMate() -> (white: Bool, black: Bool) {
+    public func isCheckMate() -> (white: Bool, black: Bool) {
         
         let isCheckWhite = whiteKing.isChecked(board: self)
         var isCheckMateWhite = false
@@ -182,7 +182,7 @@ final class Board {
         return (white: isCheckMateWhite, black: isCheckMateBlack)
     }
     
-    func isDraw(from: Position, to: Position) -> (white: Bool, black: Bool) {
+    public func isDraw(from: Position, to: Position) -> (white: Bool, black: Bool) {
         
         let isCheckWhite = whiteKing.isChecked(board: self)
         var isDrawWhite = false
@@ -201,7 +201,7 @@ final class Board {
         return (white: isDrawWhite, black: isDrawBlack)
     }
     
-    func isCheck(from: Position, to: Position) -> (white: Bool, black: Bool) {
+    public func isCheck(from: Position, to: Position) -> (white: Bool, black: Bool) {
         let boardCopy = self.copy()
         let piece = boardCopy.piece(at: from)
         boardCopy[from.x, from.y].piece = nil
@@ -223,26 +223,26 @@ final class Board {
         return (white: isCheckWhite, black: isCheckBlack)
     }
     
-    func indexIsValid(column: Int, row: Int) -> Bool {
+    public func indexIsValid(column: Int, row: Int) -> Bool {
         return row >= 0 && row < rows && column >= 0 && column < columns
     }
     
-    func piece(at: Position) -> Piece? {
+    public func piece(at: Position) -> Piece? {
         return self[at.x, at.y].piece
     }
     
-    func hasPiece(at: Position) -> Bool {
+    public func hasPiece(at: Position) -> Bool {
         return self[at.x, at.y].piece != nil
     }
     
-    func has(color: Color, at: Position) -> Bool {
+    public func has(color: Color, at: Position) -> Bool {
         if let pieace = self[at.x, at.y].piece {
             return pieace.color == color
         }
         return false
     }
     
-    func position(of: Piece) -> Position? {
+    public func position(of: Piece) -> Position? {
         for column in 0...columns-1 {
             for row in 0...rows-1 {
                 if let piece = self[column, row].piece {
@@ -255,16 +255,16 @@ final class Board {
         return nil
     }
     
-    subscript(column: Int, row: Int) -> Square {
+    public subscript(column: Int, row: Int) -> Square {
         get { return grid[(row * columns) + column] }
         set { grid[(row * columns) + column] = newValue }
     }
     
-    func currentPieces(color: Color) -> [Piece] {
+    public func currentPieces(color: Color) -> [Piece] {
         return grid.flatMap { $0.piece }.filter { $0.color == color }
     }
     
-    func initializePieces() {
+    public func initializePieces() {
         // Pawns
         for column in 0...columns-1 {
             self[column, 1].piece = Pawn(color: playerColor.opposite(), moved: false)
@@ -312,7 +312,7 @@ final class Board {
         
     }
     
-    func movePieces(changeSet: ChangeSet) {
+    public func movePieces(changeSet: ChangeSet) {
         for movement in changeSet.movements {
             if let fromPiece = piece(at: movement.from) {
                 fromPiece.moved = true
