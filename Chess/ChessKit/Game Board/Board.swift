@@ -82,11 +82,11 @@ public final class Board {
             }
         }
         selectedPiece.signal.observeValues { selectedPiece in
-            if let selectedPiece = selectedPiece , let selectedPosition = self.position(of: selectedPiece)  {
-                self.validMoves.value = selectedPiece.validMoves(from: selectedPosition, board: self, check: true)
-            } else {
+            guard let selectedPiece = selectedPiece , let selectedPosition = self.position(of: selectedPiece) else {
                 self.validMoves.value = nil
+                return
             }
+            self.validMoves.value = selectedPiece.validMoves(from: selectedPosition, board: self, check: true)
         }
         let validator = Signal.combineLatest(selectedPiece.signal, validMoves.signal).map { selected, validMoves -> [Position]? in
             var squaresToHighlight = validMoves
@@ -105,35 +105,11 @@ public final class Board {
         // d. unselecting
         // e. invalid move
         // f. moving a piece
-        if let tappedPiece = piece(at: tappedPosition) {
-            if let selectedPiece = selectedPiece.value {
-                if selectedPiece === tappedPiece {
-                    // d. unselecting
-                    self.selectedPiece.value = nil
-                } else if selectedPiece.color == tappedPiece.color {
-                    // a. selecting a piece
-                    self.selectedPiece.value = tappedPiece
-                } else {
-                    if let from = position(of: selectedPiece),
-                        let to = position(of: tappedPiece) {
-                        if selectedPiece.canMove(from: from, to: to, board: self) {
-                            let changeSet = ChangeSet(movements: [(from: from, to: to)])
-                            movePieces(changeSet: changeSet)
-                        } else {
-                            // e. invalid move
-                            //showInvalidMove()
-                        }
-                    }
-                }
-            } else {
-                 // a. selecting a piece
-                selectedPiece.value = tappedPiece
-            }
-        } else {
+        guard let tappedPiece = piece(at: tappedPosition) else {
             if let selectedPiece = selectedPiece.value,
                 let from = position(of: selectedPiece) {
                 if selectedPiece.canMove(from: from, to: tappedPosition, board: self) {
-                    // a. moving a piece
+                    // f. moving a piece
                     let changeSet = ChangeSet(movements: [(from: from, to: tappedPosition)])
                     movePieces(changeSet: changeSet)
                 } else {
@@ -142,6 +118,33 @@ public final class Board {
                 }
             } else {
                 // b. invalid move
+                //showInvalidMove()
+            }
+            return
+        }
+        
+        guard let selectedPiece = selectedPiece.value else {
+            // a. selecting a piece
+            self.selectedPiece.value = tappedPiece
+            return
+        }
+        
+        if selectedPiece === tappedPiece {
+            // d. unselecting
+            self.selectedPiece.value = nil
+        } else if selectedPiece.color == tappedPiece.color {
+            // a. selecting a piece
+            self.selectedPiece.value = tappedPiece
+        } else {
+            guard let from = position(of: selectedPiece),
+                  let to = position(of: tappedPiece) else {
+                    return
+            }
+            if selectedPiece.canMove(from: from, to: to, board: self) {
+                let changeSet = ChangeSet(movements: [(from: from, to: to)])
+                movePieces(changeSet: changeSet)
+            } else {
+                // e. invalid move
                 //showInvalidMove()
             }
         }

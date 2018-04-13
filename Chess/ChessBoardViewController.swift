@@ -20,7 +20,9 @@ final class ChessBoardViewController: UIViewController {
     var bottomPlayerView: PlayerView!
     
     private func showWinner(color: Color) {
-        let alert = UIAlertController(title: "Checkmate", message: "\(color == .white ? "white" : "black") wins", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Checkmate",
+                                      message: "\(color == .white ? "white" : "black") wins",
+                                      preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "New Game", style: .default) { [weak self] _ in
             self?.loadBoard(board: Board(playerColor: .white))
         })
